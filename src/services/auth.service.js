@@ -5,6 +5,7 @@ import axios from 'axios';
 
 export const API_URL = 'http://localhost:3001/api/v1/user'
 
+//endpoint /login pour l'authentification
 const login = async (user) => {
   const request = await axios.post(API_URL + "/login", { email: user.email, password: user.password });
   const response = await request.data;
@@ -14,7 +15,7 @@ const login = async (user) => {
   } else {
     sessionStorage.setItem("authUser", JSON.stringify(response));
   }
-
+//recupere les données de l'utilisateur quand le login a reussi
   try {
     const profileResponse = await profile(response.body.token);
     if (user.rememberMe) {
@@ -42,6 +43,7 @@ const getStoredAuthUser = () => {
   return null;
 };
 
+//recup le donnée mock de profile
 const fetchAccounts = async () => {
   try {
     const response = await axios.get("./mock/mockData.json");
@@ -52,6 +54,7 @@ const fetchAccounts = async () => {
   }
 };
 
+// endpoint /profile pour recuperer les données de l'utilisateur
 const profile = (token) => {
   return axios({
     method: "POST",
@@ -67,6 +70,7 @@ const profile = (token) => {
     });
 }
 
+// gere le sign out
 const logout = () => {
   localStorage.removeItem("authUser");
   localStorage.removeItem("userDetails");
@@ -74,6 +78,7 @@ const logout = () => {
   sessionStorage.removeItem("userDetails");
 };
 
+//endpoing /profile pour recuperer les données de l'utilisateur
 const updateProfile = (token, firstName, lastName) => {
   return axios({
     method: "PUT",

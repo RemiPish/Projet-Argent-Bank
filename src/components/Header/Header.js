@@ -11,6 +11,7 @@ export default function Header() {
   const user = useSelector(selectUser);
   const firstName = user ? user.firstName : null;
 
+  // changement d'affichage quand on est connecté ou non
   return (
     <nav className="main-nav">
       <Link className="main-nav-logo" to="/">

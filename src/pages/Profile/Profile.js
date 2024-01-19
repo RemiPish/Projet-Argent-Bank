@@ -6,27 +6,33 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserProfile, selectUser, updateProfile } from '../../redux/userSlice';
 import authService from "./../../services/auth.service"
 
+//Profile: Affiche la page profil du utilisateur et gere le changement de nom de l'utilisateur
 export default function Profile() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    // recupere les données de redux store, authUser et user
     const authUser = useSelector(selectAuthUser);
     const user = useSelector(selectUser);
 
+    // etats lors du changement de nom/ prenom de l'utilisateur
     const [editInfo, setEditInfo] = useState(false);
     const [firstName, setFirstName] = useState(user ? user.firstName : '');
     const [lastName, setLastName] = useState(user ? user.lastName : '');
     const [error, setError] = useState('');
 
+    // etat pour stocker les données de l'utilisateur
     const [accounts, setAccounts] = useState([]);
 
 
 
     useEffect(() => {
-
+        // quand on n'st pas connecté, si on est sur la page profile, on redirige vers la page d'accueil
         if (!authUser) {
             navigate('/');
             return;
         }
+        // on recupère les données de l'utilisateur
         const fetchData = async () => {
             try {
                 const accountsData = await authService.fetchAccounts();
@@ -35,6 +41,8 @@ export default function Profile() {
                 console.error('Error fetching accounts:', error);
             }
         };
+
+        //recupere les données de l'utilisateur si user n'est pas deja chargé
         if (authUser && !user) {
             const token = authUser.body.token;
             dispatch(fetchUserProfile(token)).then((actionResult) => {
@@ -49,6 +57,7 @@ export default function Profile() {
         fetchData();
     }, [authUser, user, dispatch, navigate]);
 
+    //gere le sauvegarde de l'edit nom/prenom
     const handleEditSave = async (e) => {
         e.preventDefault();
 
@@ -93,6 +102,8 @@ export default function Profile() {
         setError("");
         setEditInfo(false);
     }
+
+    //affichage page profile
     return (
         <main className="main bg-dark">
             <div className="header">

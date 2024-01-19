@@ -5,21 +5,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthUser } from '../../redux/authSlice';
 import './SignIn.scss';
 
+//SignIn: Gere le processus d'inscription d'utilisateur
 export default function SignIn() {
+    //hooks pour naviguer et dispatch
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    //State pour stocker les info login d'utilisateur et l'option 'se souvenir de moi'
     const [credentials, setCredentials] = useState({ username: '', password: '' });
     const [rememberMe, setRememberMe] = useState(false);
+
+    //redux state selector
     const authUser = useSelector(selectAuthUser);
     const { isLoading, error } = useSelector((state) => state.auth);
 
+    //redirection vers la page profile si l'utilisateur est deja connecté
     useEffect(() => {
         if (authUser) {
             navigate('/profile');
         }
     }, [authUser, navigate]);
 
+    //gere les changements dans les champs de login
     function handleInputChange(e) {
         setCredentials({
             ...credentials,
@@ -27,10 +34,12 @@ export default function SignIn() {
         });
     }
 
+    //gere le changement de l'option 'Se souvenir de moi'
     function handleCheckboxChange(e) {
         setRememberMe(e.target.checked);
     }
 
+    //gere le processus d'inscription d'utilisateur
     const handleLogin = (e) => {
         e.preventDefault();
         const userData = {
@@ -41,6 +50,7 @@ export default function SignIn() {
         dispatch(login(userData));
     };
 
+    //affiche la page de login
     return <main className="main bg-dark">
         <section className="sign-in-content">
             <i className="fa fa-user-circle sign-in-icon"></i>

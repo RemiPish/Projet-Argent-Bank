@@ -4,7 +4,7 @@ import money from "../../assets/img/icon-money.png";
 import chat from "../../assets/img/icon-chat.png";
 import security from "../../assets/img/icon-security.png";
 
-
+// MainPage Component: Affiche la page d'accueil de Argent Bank
 export default function MainPage() {
     document.title = "Argent Bank - Home Page";
     return <main>
